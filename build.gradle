@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'network'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.codeborne', name: 'selenide', version: '7.7.1'
+    implementation 'ch.qos.logback:logback-classic:1.4.12'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+application {
+    mainClassName = 'network.MakeSpeedtestReports'
+}
+
+test {
+    useJUnitPlatform()
+
+    systemProperty 'selenide.browser', 'chrome'
+    systemProperty 'selenide.browserSize', '1920x1080'
+    systemProperty 'selenide.reopenBrowserOnFail', 'false'
+    systemProperty 'selenide.holdBrowserOpen', 'false'
+    systemProperty 'selenide.headless', 'true'
+    systemProperty 'selenide.baseUrl', 'https://www.speedtest.net'
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'network.MakeSpeedtestReports'
+    }
+}
